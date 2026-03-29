@@ -61,40 +61,55 @@
         
         /* Unified scrollable modal structure */
         .modal-container {
-            max-height: 90vh;
+            max-height: 92vh;
             display: flex;
             flex-direction: column;
             width: 100%;
             max-width: 42rem;
-            margin: 20px;
+            margin: 12px;
             background: white;
-            border-radius: 2.5rem;
+            border-radius: 1.5rem;
             overflow: hidden;
         }
 
         .modal-body {
             flex: 1 1 auto;
             overflow-y: auto;
-            padding: 2.5rem;
+            padding: 1rem;
         }
 
         .modal-header {
             flex: 0 0 auto;
-            padding: 2rem 2.5rem;
+            padding: 1rem;
             border-bottom: 1px solid #f1f5f9;
+        }
+
+        @media (min-width: 640px) {
+            .modal-container {
+                margin: 20px;
+                border-radius: 2.5rem;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+
+            .modal-header {
+                padding: 1.5rem 2rem;
+            }
         }
     </style>
 </head>
-<body class="flex min-h-screen">
+<body class="min-h-screen bg-[#f8fafc]">
 
     <!-- Auth Overlay -->
     <div id="adminLogin" class="fixed inset-0 z-[500] bg-slate-900 flex items-center justify-center p-6">
-        <div class="bg-white w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl border border-white/20">
+        <div class="bg-white w-full max-w-md p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl border border-white/20">
             <div class="text-center mb-8">
                 <div class="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-700 mx-auto mb-6 shadow-inner">
                     <i class="fas fa-shield-alt text-4xl"></i>
                 </div>
-                <h2 class="text-3xl font-800 text-slate-900 tracking-tight">Admin Control Panel</h2>
+                <h2 class="text-2xl sm:text-3xl font-800 text-slate-900 tracking-tight">Admin Control Panel</h2>
                 <p class="text-slate-500 text-sm mt-3 font-medium">Verify Emmytech Credentials</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-5">
@@ -116,8 +131,9 @@
         </div>
     </div>
 
+    <div class="flex min-h-screen relative">
     <!-- Sidebar (Scroll Fix Integrated) -->
-    <aside id="sidebar" class="hidden w-72 bg-white border-r border-slate-200 flex-col shrink-0 h-screen sticky top-0">
+    <aside id="sidebar" class="hidden fixed inset-y-0 left-0 z-[450] w-72 max-w-[85vw] bg-white border-r border-slate-200 flex-col h-screen transform -translate-x-full transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:flex lg:shrink-0">
         <div class="p-8 border-b border-slate-100 shrink-0">
             <h1 class="font-900 text-2xl text-blue-900 tracking-tighter">EMMY<span class="text-blue-600">TECH</span></h1>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 text-center bg-blue-50 py-1 rounded-lg">Panel Active</p>
@@ -148,46 +164,53 @@
         </div>
     </aside>
 
+    <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-slate-900/50 z-[430] lg:hidden" onclick="closeSidebar()"></div>
+
     <!-- Main Content -->
-    <main id="mainContent" class="hidden flex-grow flex flex-col h-screen overflow-hidden">
-        <header class="h-24 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0">
-            <h2 id="currentTabTitle" class="text-2xl font-800 text-slate-800 tracking-tight uppercase">Performance Overview</h2>
-            <div class="flex items-center gap-6">
+    <main id="mainContent" class="hidden flex-1 flex-col min-h-screen lg:h-screen overflow-hidden lg:ml-0 w-full">
+        <header class="h-20 lg:h-24 bg-white border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 lg:px-10 shrink-0">
+            <div class="flex items-center gap-3 lg:gap-4 min-w-0">
+                <button onclick="openSidebar()" class="lg:hidden w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-slate-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-bars text-base"></i>
+                </button>
+                <h2 id="currentTabTitle" class="text-base sm:text-lg lg:text-2xl font-800 text-slate-800 tracking-tight uppercase truncate">Performance Overview</h2>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-4 lg:gap-6">
                 <button onclick="initDashboard()" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-colors">
                     <i class="fas fa-sync-alt text-sm"></i>
                 </button>
-                <div class="text-right">
+                <div class="hidden sm:block text-right">
                     <p class="text-sm font-800 text-slate-900">Emmytech Admin</p>
                     <p class="text-[10px] text-green-500 font-bold uppercase tracking-wider">Live Monitoring</p>
                 </div>
-                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm border border-blue-100">
-                    <i class="fas fa-fingerprint text-xl"></i>
+                <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm border border-blue-100">
+                    <i class="fas fa-fingerprint text-lg lg:text-xl"></i>
                 </div>
             </div>
         </header>
 
-        <div class="p-10 flex-grow overflow-y-auto custom-scrollbar bg-[#f8fafc]">
+        <div class="p-4 sm:p-6 lg:p-10 flex-grow overflow-y-auto custom-scrollbar bg-[#f8fafc]">
             
             <!-- OVERVIEW TAB -->
             <div id="tab-overview" class="tab-content active">
                 <!-- Analytics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <div class="bg-white p-5 sm:p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-sm border border-slate-100">
                         <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4"><i class="fas fa-sync-alt"></i></div>
                         <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Spins Today</p>
                         <h3 id="statTodaySpins" class="text-3xl font-800 text-slate-900 mt-1">0</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <div class="bg-white p-5 sm:p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-sm border border-slate-100">
                         <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-4"><i class="fas fa-user-friends"></i></div>
                         <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Active Players</p>
                         <h3 id="statTodayUsers" class="text-3xl font-800 text-slate-900 mt-1">0</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <div class="bg-white p-5 sm:p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-sm border border-slate-100">
                         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-4"><i class="fas fa-award"></i></div>
                         <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Value Won Today</p>
                         <h3 id="statTodayValue" class="text-3xl font-800 text-slate-900 mt-1">₦0</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <div class="bg-white p-5 sm:p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-sm border border-slate-100">
                         <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4"><i class="fas fa-user-plus"></i></div>
                         <p class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">New Referrals</p>
                         <h3 id="statTodayRefs" class="text-3xl font-800 text-slate-900 mt-1">0</h3>
@@ -196,14 +219,14 @@
 
                 <!-- Charts Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                    <div class="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100">
+                    <div class="bg-white rounded-[2rem] lg:rounded-[3rem] p-5 sm:p-6 lg:p-10 shadow-sm border border-slate-100">
                         <div class="flex items-center justify-between mb-8">
                             <h4 class="text-lg font-800 text-slate-900">Spin Activity Trend</h4>
                             <span class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Last 7 Days</span>
                         </div>
                         <div class="h-[300px] w-full"><canvas id="spinTrendChart"></canvas></div>
                     </div>
-                    <div class="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100">
+                    <div class="bg-white rounded-[2rem] lg:rounded-[3rem] p-5 sm:p-6 lg:p-10 shadow-sm border border-slate-100">
                         <div class="flex items-center justify-between mb-8">
                             <h4 class="text-lg font-800 text-slate-900">Prize Distribution</h4>
                             <span class="text-[10px] font-900 text-slate-400 uppercase tracking-widest">Top Mix</span>
@@ -213,11 +236,11 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100">
+                    <div class="lg:col-span-2 bg-white rounded-[2rem] lg:rounded-[3rem] p-5 sm:p-6 lg:p-10 shadow-sm border border-slate-100">
                         <h4 class="text-lg font-800 text-slate-900 mb-6">Recent Activity Logs</h4>
                         <div id="overviewActivity" class="space-y-4"></div>
                     </div>
-                    <div class="bg-blue-900 rounded-[3rem] p-10 text-white shadow-xl shadow-blue-200">
+                    <div class="bg-blue-900 rounded-[2rem] lg:rounded-[3rem] p-5 sm:p-6 lg:p-10 text-white shadow-xl shadow-blue-200">
                         <h4 class="text-lg font-800 mb-6">Daily Insights</h4>
                         <div class="space-y-8">
                             <div>
@@ -237,7 +260,7 @@
             <div id="tab-prizes" class="tab-content">
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
                     <div><h3 class="text-lg font-800 text-slate-800">Wheel Configuration</h3><p class="text-sm text-slate-500 font-medium">Manage active slices and triggers.</p></div>
-                    <div class="flex gap-3">
+                    <div class="flex flex-wrap gap-3">
                         <div class="bg-blue-900 text-white px-5 py-3.5 rounded-2xl flex items-center gap-3"><span class="text-[10px] font-900 uppercase">Live Slices:</span><span id="activeSliceCount" class="text-lg font-800">0/9</span></div>
                         <button onclick="showAddPrizeModal()" class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3.5 rounded-2xl font-800 text-xs uppercase tracking-widest shadow-lg transition-all">Add Item</button>
                     </div>
@@ -249,9 +272,9 @@
             <div id="tab-claims" class="tab-content">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div><h3 class="text-lg font-800 text-slate-800">Fulfillment</h3><p class="text-sm text-slate-500 font-medium">Confirm user rewards.</p></div>
-                    <div class="relative"><input type="text" id="claimsSearch" oninput="filterClaims()" placeholder="Search winners..." class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 w-64 shadow-sm"></div>
+                    <div class="relative"><input type="text" id="claimsSearch" oninput="filterClaims()" placeholder="Search winners..." class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-blue-500 w-full md:w-64 shadow-sm"></div>
                 </div>
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+                <div class="bg-white rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[800px]">
                             <thead><tr class="bg-slate-50/50 text-[10px] font-900 text-slate-400 uppercase tracking-widest border-b border-slate-100"><th class="p-8">Winner</th><th class="p-8">Prize</th><th class="p-8">Status</th><th class="p-8">Won Date</th><th class="p-8 text-right">Action</th></tr></thead>
@@ -263,7 +286,7 @@
 
             <!-- USERS TAB -->
             <div id="tab-users" class="tab-content">
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+                <div class="bg-white rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[800px]">
                             <thead>
@@ -287,9 +310,10 @@
             </div>
         </div>
     </main>
+    </div>
 
     <!-- User Master Detail Modal (Fixed Layout) -->
-    <div id="userModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center p-6">
+    <div id="userModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center p-3 sm:p-6">
         <div class="modal-container">
             <div class="modal-header flex justify-between items-start">
                 <div>
@@ -301,14 +325,14 @@
             
             <div class="modal-body custom-scrollbar space-y-8">
                 <!-- User Stats -->
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-blue-50 p-6 rounded-3xl text-center"><span class="block text-[10px] font-900 text-blue-400 uppercase mb-1">Spin Power</span><span id="statSpins" class="text-xl font-800 text-blue-900">0</span></div>
                     <div class="bg-emerald-50 p-6 rounded-3xl text-center"><span class="block text-[10px] font-900 text-emerald-400 uppercase mb-1">Items Won</span><span id="statPrizes" class="text-xl font-800 text-emerald-900">0</span></div>
                     <div class="bg-amber-50 p-6 rounded-3xl text-center"><span class="block text-[10px] font-900 text-amber-400 uppercase mb-1">Referrals</span><span id="statRefs" class="text-xl font-800 text-amber-900">0</span></div>
                 </div>
 
                 <!-- Admin Action Card -->
-                <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-lg">
+                <div class="bg-slate-900 text-white p-5 sm:p-6 lg:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-lg">
                     <h4 class="text-xs font-900 text-blue-400 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Control Hub</h4>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -333,7 +357,7 @@
                     <!-- Spin Addition -->
                     <div>
                         <label class="text-[9px] font-800 text-slate-400 uppercase mb-3 block px-1">Credit Remaining Spins</label>
-                        <div class="flex items-center gap-4">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                             <input type="number" id="addSpinsAmount" placeholder="Amount..." class="flex-grow bg-slate-800 border-none rounded-xl px-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:ring-2 focus:ring-blue-500 outline-none">
                             <button id="updateSpinsBtn" onclick="updateUserSpins()" class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-xl text-xs font-900 uppercase tracking-widest shadow-lg transition-all min-w-[140px] flex items-center justify-center">
                                 <span>Add Spins</span>
@@ -361,7 +385,7 @@
     </div>
 
     <!-- Prize Configuration Modal (Fixed Layout) -->
-    <div id="prizeModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center p-6">
+    <div id="prizeModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center p-3 sm:p-6">
         <div class="modal-container max-w-lg">
             <div class="modal-header flex justify-between items-center">
                 <h3 id="prizeModalTitle" class="text-2xl font-800 text-slate-900">Configure Prize</h3>
@@ -372,7 +396,7 @@
                 <form id="prizeForm" onsubmit="savePrize(event)" class="space-y-6">
                     <input type="hidden" id="editPrizeId">
                     <div><label class="text-[10px] font-900 text-slate-400 uppercase tracking-widest block mb-2 px-1">Display Label</label><input type="text" id="editPrizeLabel" required placeholder="e.g. 50 Naira Airtime" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 outline-none focus:border-blue-700 font-bold"></div>
-                    <div class="grid grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div><label class="text-[10px] font-900 text-slate-400 uppercase tracking-widest block mb-2 px-1">Gravity (Prob.)</label><input type="number" id="editPrizeGravity" required class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 outline-none font-bold"></div>
                         <div><label class="text-[10px] font-900 text-slate-400 uppercase tracking-widest block mb-2 px-1">Value (₦)</label><input type="number" id="editPrizeValue" required class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 outline-none font-bold"></div>
                     </div>
@@ -380,7 +404,7 @@
                         <div class="flex items-center justify-between"><div><p class="text-sm font-800 text-slate-800">Active on Wheel</p><p class="text-[10px] text-slate-400 font-bold italic">Max 9 items allowed.</p></div><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="editPrizeOnWheel" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div></label></div>
                         <div class="flex items-center justify-between border-t border-slate-200 pt-5"><div><p class="text-sm font-800 text-slate-800 flex items-center gap-2"><i class="fas fa-magnet text-orange-500"></i> Near Miss</p><p class="text-[10px] text-slate-400 font-bold italic">Trigger animation effect.</p></div><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="editPrizeNearMiss" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div></label></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div><label class="text-[10px] font-900 text-slate-400 uppercase tracking-widest block mb-2 px-1">Type</label><select id="editPrizeType" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 outline-none font-bold appearance-none"><option value="airtime">Airtime</option><option value="merchandise">Merchandise</option><option value="retry">Retry/Try Again</option><option value="voucher">Voucher/Discount</option></select></div>
                         <div><label class="text-[10px] font-900 text-slate-400 uppercase tracking-widest block mb-2 px-1">Initial Stock</label><input type="number" id="editPrizeStock" required class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 outline-none font-bold"></div>
                     </div>
@@ -408,6 +432,22 @@
         const setHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
         const setText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar) sidebar.classList.remove('-translate-x-full');
+            if (backdrop) backdrop.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar) sidebar.classList.add('-translate-x-full');
+            if (backdrop) backdrop.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
         async function handleAdminLogin(e) {
             e.preventDefault();
             const username = document.getElementById('adminUser')?.value.trim();
@@ -421,6 +461,13 @@
             document.getElementById('adminLogin').classList.add('hidden');
             document.getElementById('sidebar').classList.remove('hidden');
             document.getElementById('sidebar').classList.add('flex');
+
+            if (window.innerWidth >= 1024) {
+                document.getElementById('sidebar').classList.remove('-translate-x-full');
+            } else {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+
             document.getElementById('mainContent').classList.remove('hidden');
             setTimeout(initDashboard, 100);
         }
@@ -437,10 +484,24 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             const activeTab = document.getElementById(`tab-${tabId}`);
             if (activeTab) activeTab.classList.add('active');
+
             document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
             const activeBtn = Array.from(document.querySelectorAll('.sidebar-item')).find(b => b.onclick.toString().includes(tabId));
-            if(activeBtn) activeBtn.classList.add('active');
-            setText('currentTabTitle', tabId.toUpperCase());
+            if (activeBtn) activeBtn.classList.add('active');
+
+            const tabTitles = {
+                overview: 'Performance Overview',
+                prizes: 'Wheel Prizes',
+                claims: 'Prize Claims',
+                users: 'User Database',
+                logs: 'Audit Logs'
+            };
+
+            setText('currentTabTitle', tabTitles[tabId] || tabId.toUpperCase());
+
+            if (window.innerWidth < 1024) {
+                closeSidebar();
+            }
         }
 
         async function loadOverview() {
@@ -492,7 +553,7 @@
                 const { data, error } = await sb.from('prizes').select('*').order('created_at', { ascending: true }); if (error) throw error; allPrizes = data || [];
                 const activeCount = allPrizes.filter(p => p.on_wheel === true).length; setText('activeSliceCount', `${activeCount}/9`);
                 setHTML('prizesGrid', allPrizes.length ? allPrizes.map(p => `
-                    <div class="bg-white p-8 rounded-[2.5rem] border-2 ${p.on_wheel ? 'border-blue-200 bg-blue-50/10' : 'border-slate-100'} shadow-sm relative group">
+                    <div class="bg-white p-5 sm:p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] border-2 ${p.on_wheel ? 'border-blue-200 bg-blue-50/10' : 'border-slate-100'} shadow-sm relative group">
                         ${p.on_wheel ? '<span class="absolute top-6 right-6 bg-blue-600 text-white text-[8px] font-900 px-3 py-1 rounded-full uppercase tracking-widest">WHEEL LIVE</span>' : ''}
                         <div class="flex justify-between items-start mb-6">
                             <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-blue-600 text-2xl shadow-sm"><i class="fas ${p.prize_type === 'airtime' ? 'fa-mobile-alt' : (p.prize_type === 'retry' ? 'fa-redo' : 'fa-gift')}"></i></div>
@@ -571,7 +632,19 @@
                 else if (!cleanPhone.startsWith('234')) cleanPhone = '234' + cleanPhone;
                 
                 const waMsg = encodeURIComponent(
-                  `Hello ${user.full_name || 'there'} this is emmytechnology! you recently participated in our spin wheel. we have saved your contact. kindly save ours as well, type "Done" once saved.`
+                `Hello *${user.full_name || 'there'}* 👋
+                
+                This is *EmmyTechnology* 🚀
+                
+                You recently participated in our *Spin Wheel Experience* 🎯  
+                We’re glad to have you with us!
+                
+                We’ve saved your contact on our end 📌  
+                Kindly save ours as well so you don’t miss any updates.
+                
+                _Type "Done" once you’ve saved our number._ ✅
+                
+                Looking forward to staying connected with you 🤝`
                 );
                 
                 const waBtn = document.getElementById('waDirectBtn');
@@ -656,6 +729,21 @@
                 `).join('') : '<p class="text-center py-20 text-slate-300 font-bold italic">Log is empty.</p>');
             } catch (err) { console.error("Logs error:", err); }
         }
+
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            if (window.innerWidth >= 1024) {
+                if (sidebar) sidebar.classList.remove('-translate-x-full');
+                if (backdrop) backdrop.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            } else {
+                if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                    if (backdrop) backdrop.classList.remove('hidden');
+                }
+            }
+        });
 
         setInterval(() => { const login = document.getElementById('adminLogin'); if (login && !login.classList.contains('hidden')) return; loadOverview(); loadLogs(); }, 30000); 
     </script>
