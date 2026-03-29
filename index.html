@@ -633,20 +633,20 @@
                 else if (!cleanPhone.startsWith('234')) cleanPhone = '234' + cleanPhone;
                 
                 const waMsg = encodeURIComponent(
-                `Hello *${user.full_name || 'there'}* 👋
+`Hello *${user.full_name || 'there'}* 👋
                 
-                This is *EmmyTechnology* 🚀
+This is *EmmyTechnology* 🚀
+
+You recently participated in our *Spin Wheel Experience* 🎯  
+We’re glad to have you with us!
                 
-                You recently participated in our *Spin Wheel Experience* 🎯  
-                We’re glad to have you with us!
+We’ve saved your contact on our end 📌  
+Kindly save ours as well so you don’t miss any updates.
                 
-                We’ve saved your contact on our end 📌  
-                Kindly save ours as well so you don’t miss any updates.
+_Type "Done" once you’ve saved our number._ ✅
                 
-                _Type "Done" once you’ve saved our number._ ✅
-                
-                Looking forward to staying connected with you 🤝`
-                );
+Looking forward to staying connected with you 🤝`
+ );
                 
                 const waBtn = document.getElementById('waDirectBtn');
                 if (waBtn) waBtn.href = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${waMsg}`;
