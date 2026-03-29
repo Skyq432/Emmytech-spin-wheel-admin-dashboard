@@ -20,8 +20,9 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #f8fafc; 
             color: #1e293b;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .sidebar-item.active { 
@@ -167,7 +168,7 @@
     <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-slate-900/50 z-[430] lg:hidden" onclick="closeSidebar()"></div>
 
     <!-- Main Content -->
-    <main id="mainContent" class="hidden flex-1 flex-col min-h-screen lg:h-screen overflow-hidden lg:ml-0 w-full">
+    <main id="mainContent" class="hidden flex-1 flex-col min-h-screen lg:h-screen overflow-y-auto overflow-x-hidden lg:ml-0 w-full">
         <header class="h-20 lg:h-24 bg-white border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 lg:px-10 shrink-0">
             <div class="flex items-center gap-3 lg:gap-4 min-w-0">
                 <button onclick="openSidebar()" class="lg:hidden w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-slate-600 hover:text-blue-600 transition-colors">
@@ -189,7 +190,7 @@
             </div>
         </header>
 
-        <div class="p-4 sm:p-6 lg:p-10 flex-grow overflow-y-auto custom-scrollbar bg-[#f8fafc]">
+        <div class="p-4 sm:p-6 lg:p-10 flex-grow overflow-y-auto custom-scrollbar bg-[#f8fafc] min-h-0">
             
             <!-- OVERVIEW TAB -->
             <div id="tab-overview" class="tab-content active">
