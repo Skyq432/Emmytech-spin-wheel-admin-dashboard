@@ -565,13 +565,17 @@
                 setText('statRefs', user.total_referrals_count || 0);
                 
                 // WhatsApp Formatting logic
+               // WhatsApp Formatting logic
                 let cleanPhone = user.phone_number.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
                 else if (!cleanPhone.startsWith('234')) cleanPhone = '234' + cleanPhone;
                 
-                const waMsg = encodeURIComponent(`Hello ${user.full_name}, this is Emmytech! I'm reaching out regarding your activity on our Spin Wheel.`);
+                const waMsg = encodeURIComponent(
+                  `Hello ${user.full_name || 'there'} this is emmytechnology! you recently participated in our spin wheel. we have saved your contact. kindly save ours as well, type "Done" once saved.`
+                );
+                
                 const waBtn = document.getElementById('waDirectBtn');
-                if (waBtn) waBtn.href = `https://wa.me/${cleanPhone}?text=${waMsg}`;
+                if (waBtn) waBtn.href = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${waMsg}`;
 
                 const delBtn = document.getElementById('deleteUserBtn');
                 if (delBtn) delBtn.onclick = () => deleteUser(user.id, user.full_name);
